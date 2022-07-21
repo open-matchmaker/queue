@@ -17,11 +17,12 @@ function joinQueue(name, player, necessaryPlayers) {
   if(queueGame === undefined){
     const userQueue = new Games(name, necessaryPlayers)
     userQueue.players.push(player)
+    queueGames.push(userQueue);
   }
   
   if(queueGame){
     addPlayersQueueGame(queueGame, player)
-    console.log(itsMatch(queueGame));
+    return itsMatch(queueGame);
   }
   return user;
 }
@@ -36,7 +37,7 @@ function addPlayersQueueGame(queueGame, player){
 }
 
 function itsMatch(queueGame){
-  if((queueGame.players.length) === queueGame.necessaryPlayers){
+  if((queueGame.players.length) == queueGame.necessaryPlayers){
     userLeave(queueGame.name, queueGame.necessaryPlayers)
     return ({message:'ITS MATCH!', players: queueGame.players})
   }

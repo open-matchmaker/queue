@@ -14,6 +14,8 @@ const {
   getRoomUsers,
 } = require("./utils/users");
 
+const queueLoad = require('./utils/queue')
+
 const app = express();
 const server = http.createServer(app);
 const io = socketio(server);
@@ -32,56 +34,20 @@ const botName = "ChatCord Bot";
 
 // Run when client connects
 io.on("connection", (socket) => {
-  socket.on("joinRoom", ({ username, room }) => {
-    const user = userJoin(socket.id, username, room);
+  socket.on("joinRoom", (userQueue) => {
+    const resposneQueue = queueLoad.joinQueue(userQueue.room, userQueue.username, userQueue.numberPlayers)
 
-    socket.join(user.room);
-
-    // Welcome current user 
-    socket.emit("message", formatMessage(botName, "Welcome to ChatCord!"));
-
-    // Broadcast when a user connects
-    // emit to everybody EXCEPT the sender
-    socket.broadcast
-      .to(user.room)
-      .emit(
-        "message",
-        formatMessage(botName, `${user.username} has joined the chat`)
-      );
-
-    // Send users and room info
-    io.to(user.room).emit("roomUsers", {
-      room: user.room,
-      users: getRoomUsers(user.room),
-    });
-  });
-
-  // Listen for chatMessage
-  socket.on("chatMessage", (msg) => {
-    const user = getCurrentUser(socket.id);
-
-    io.to(user.room).emit("message", formatMessage(user.username, msg));
-  });
-
-  // Runs when client disconnects
-  socket.on("disconnect", () => {
-    const user = userLeave(socket.id);
-
-    if (user) {
-      io.to(user.room).emit(
-        "message",
-        formatMessage(botName, `${user.username} has left the chat`)
-      );
-
-      // Send users and room info
-      io.to(user.room).emit("roomUsers", {
-        room: user.room,
-        users: getRoomUsers(user.room),
-      });
+    if(resposneQueue.message){
+      io.emit("Match", resposneQueue);
     }
+
+    socket.join(userQueue.room);
+
+    socket.emit("message", "Bem viados!");
   });
+
 });
 
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 3000;
 
 server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
