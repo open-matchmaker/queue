@@ -5,9 +5,9 @@ const PostSchema = new Schema ({
         type : String,
         required: true
     },
-    queueGame: [{
+    spec: [{
         necessaryPlayers: Number,
-        playersInQueue: [{namePlayer: String}]
+        queuePlayer: [{playerName: String}]
     }]
 });
 

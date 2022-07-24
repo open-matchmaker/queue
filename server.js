@@ -14,10 +14,7 @@ const io = socketio(server);
 
 // Set static folder
 app.use(express.static(path.join(__dirname, "public")));
-
-//mongodb connection
-const test = require('./scr/services/Queue.Service');
-test.showAll();
+app.use('/queue', require('./scr/router/queue'));
 
 // Run when client connects
 io.on("connection", (socket) => {
