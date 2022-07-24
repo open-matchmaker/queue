@@ -10,6 +10,7 @@
   "author": "Brad Traversy",
   "license": "MIT",
   "dependencies": {
+    "@prisma/client": "^4.1.0",
     "@socket.io/redis-adapter": "^7.1.0",
     "dotenv": "^14.3.2",
     "express": "^4.17.1",
@@ -19,6 +20,7 @@
     "socket.io": "^4.4.1"
   },
   "devDependencies": {
-    "nodemon": "^2.0.2"
+    "nodemon": "^2.0.2",
+    "prisma": "^4.1.0"
   }
 }
