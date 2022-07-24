@@ -1,20 +1,14 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const PostSchema = new Schema ({
-    name : {
+    gameName : {
         type : String,
         required: true
     },
-    url : {
-        type:[String],
-        required: true
-    },
-    cpf : {
-        type: String,
-        required: true,
-        unique: true
-    },
-    status : String
+    queueGame: [{
+        necessaryPlayers: Number,
+        playersInQueue: [{namePlayer: String}]
+    }]
 });
 
 const queueGame = mongoose.model('Queue', PostSchema);
