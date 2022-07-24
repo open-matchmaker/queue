@@ -6,7 +6,7 @@ exports.joinQueue = async () => {
 
 }
 
-exports.showAll = async () => {
+exports.showAllQueues = async () => {
   const allQueue = await prisma.game.findMany()
-  console.log(allQueue);
+  return allQueue;
 }
