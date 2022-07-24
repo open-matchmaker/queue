@@ -6,8 +6,6 @@ const dotenv = require('dotenv').config({path : '.env'})
 
 const PORT = process.env.PORT || 3000;
 
-const connectDB = require('./scr/database/connection');
-
 const queueLoad = require('./scr/utils/queue')
 
 const app = express();
@@ -18,7 +16,8 @@ const io = socketio(server);
 app.use(express.static(path.join(__dirname, "public")));
 
 //mongodb connection
-connectDB();
+const test = require('./scr/services/Queue.Service');
+test.showAll();
 
 // Run when client connects
 io.on("connection", (socket) => {
