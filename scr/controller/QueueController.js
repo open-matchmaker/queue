@@ -14,8 +14,7 @@ exports.getAllQueue = async (req, res) => {
 exports.howToSaveJustTest = async (req,res) => {
   try {
 
-    const gameTest = await queueService.joinQueue();
-    console.log(ga);
+    const gameTest = await queueService.joinQueue('League Of Legends',2,'lol');
     return res.status(200).json(gameTest);
 
   } catch (error) {

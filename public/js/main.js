@@ -17,7 +17,7 @@ socket.on('message', (message) => {
   console.log(message);
 });
 
-socket.on('Match', (message) => {
+socket.on(room, (message) => {
   console.log(message);
 });
 

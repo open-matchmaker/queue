@@ -16,13 +16,15 @@ const io = socketio(server);
 app.use(express.static(path.join(__dirname, "public")));
 app.use('/queue', require('./scr/router/queue'));
 
+const match = "Match"
+
 // Run when client connects
 io.on("connection", (socket) => {
   socket.on("joinRoom", (userQueue) => {
     const resposneQueue = queueLoad.joinQueue(userQueue.room, userQueue.username, userQueue.numberPlayers)
 
     if(resposneQueue.message){
-      io.emit("Match", resposneQueue);
+      io.emit(userQueue.room, resposneQueue);
     }
 
     socket.join(userQueue.room);
