@@ -14,10 +14,9 @@ const io = socketio(server);
 
 // Set static folder
 app.use(express.static(path.join(__dirname, "public")));
+app.use('/queue', require('./scr/router/queue'));
 
-//mongodb connection
-const test = require('./scr/services/Queue.Service');
-test.showAll();
+const match = "Match"
 
 // Run when client connects
 io.on("connection", (socket) => {
@@ -25,7 +24,7 @@ io.on("connection", (socket) => {
     const resposneQueue = queueLoad.joinQueue(userQueue.room, userQueue.username, userQueue.numberPlayers)
 
     if(resposneQueue.message){
-      io.emit("Match", resposneQueue);
+      io.emit(userQueue.room, resposneQueue);
     }
 
     socket.join(userQueue.room);
