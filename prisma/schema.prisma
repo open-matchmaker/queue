@@ -15,7 +15,10 @@ type QueuePlayer {
 }
 
 
-type Specs  {
+model Specs  {
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId
+  specs      Game      @relation(fields: [specsId], references: [id])
+  specsId    String
   necessaryPlayers    Int
   queuePlayer QueuePlayer[]
 }
