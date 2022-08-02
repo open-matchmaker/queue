@@ -13,7 +13,7 @@ exports.getAllQueue = async (req, res) => {
 
 exports.getNece = async (req, res) => {
   try {
-    const allQueue = await queueService.getByNece('League',3);
+    const allQueue = await queueService.getByNece('azer',8);
     return res.status(200).json(allQueue);
 
   } catch (error) {
@@ -24,7 +24,7 @@ exports.getNece = async (req, res) => {
 exports.howToSaveJustTest = async (req,res) => {
   try {
 
-    const gameTest = await queueService.joinQueue('CSGO',2,'Pedrin');
+    const gameTest = await queueService.joinQueue('League Of Legends',2,'Hans');
     return res.status(200).json(gameTest);
 
   } catch (error) {

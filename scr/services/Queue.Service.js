@@ -19,23 +19,54 @@ const tests = {
 }
 
 exports.joinQueue = async (gameName, necessaryPlayers, playerName) => {
+  let specsId = ""
   const gameInQueue = await this.getByGameName(gameName);
+
   
-  //console.log(await this.getByNecessaryPlayers(gameInQueue.id, necessaryPlayers));
-  if(!gameInQueue){
-    await this.createGame(gameName, necessaryPlayers, playerName)
+  if (!gameInQueue) {
+    const gameQueue = await this.createGame(gameName, necessaryPlayers, playerName)
+    specsId = await this.getByNecessaryPlayers(gameQueue.id, necessaryPlayers)
   }
-  if(gameInQueue){
+
+  if (gameInQueue) {
     const playersQueue = await this.getByNecessaryPlayers(gameInQueue.id, necessaryPlayers)
-    if(!playersQueue){
-      await this.createQueue(gameInQueue.id, necessaryPlayers, playerName)
-    }
-    //console.log(playersQueue);
-    console.log(await this.updateQueue(playersQueue, playerName));
+
+    if (playersQueue) {
+      specsId = await this.updateQueueSpec(playersQueue, playerName)
+    };
+    if (!playersQueue) {
+      specsId = await this.createQueue(gameInQueue.id, necessaryPlayers, playerName)
+    };
+    
   }
+
+  return await this.itsMatch(specsId, necessaryPlayers)
 }
 
-exports.updateQueue = async (playersQueue, playerName) => {
+exports.itsMatch = async (specsId, necessaryPlayers) => {
+  const match = await this.getByNecessaryPlayers(specsId.specsId, necessaryPlayers)
+  
+  if( match.necessaryPlayers === match.queuePlayer.length) {
+    console.log(await this.cleanQueue(specsId.id));
+    return {queueId: specsId.id,message: 'Its a Match!', queue: match.queuePlayer}
+  }
+  
+  return {queueId: specsId.id, message: `Its necessary ${(match.necessaryPlayers - match.queuePlayer.length)} players`}
+}
+
+exports.cleanQueue = async (id) => {
+  const cleanQueue = await prisma.specs.update({
+    where: {
+      id
+    },
+    data: {
+      queuePlayer: []
+    }
+  })
+  return cleanQueue
+}
+
+exports.updateQueueSpec = async (playersQueue, playerName) => {
   let newData = playersQueue
   newData.queuePlayer.push({playerName: playerName})
   const updatedGame = await prisma.specs.update({
@@ -59,7 +90,6 @@ exports.showAllQueues = async () => {
 }
 
 exports.createQueue = async (gameId, necessaryPlayers, playerName) => {
-  console.log(playerName);
   const newQueue = await prisma.specs.create({
     data: {
       specsId: gameId,
@@ -67,7 +97,7 @@ exports.createQueue = async (gameId, necessaryPlayers, playerName) => {
       queuePlayer: [{playerName}]
     }
   })
-
+  return newQueue
 }
 
 exports.createGame = async (gameName, necessaryPlayers, playerName) => {
@@ -96,7 +126,6 @@ exports.getByGameName = async (gameName) => {
 }
 
 exports.getByNece = async (gameName, necessaryPlayers) => {
-  console.log(necessaryPlayers);
   const gameInQueue = this.getByNecessaryPlayers(gameName, necessaryPlayers)
   return gameInQueue;
 
