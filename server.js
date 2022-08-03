@@ -12,14 +12,32 @@ const app = express();
 const server = http.createServer(app);
 const io = socketio(server);
 
+const queueServices = require('./scr/services/Queue.Service')
+
 // Set static folder
 app.use(express.static(path.join(__dirname, "public")));
 app.use('/queue', require('./scr/router/queue'));
 
-const match = "Match"
 
 // Run when client connects
-io.on("connection", (socket) => {
+io.on("connection", (socket)  => {
+  socket.on("joinRoom", async (userQueue) => {
+    const resposneQueue = await queueServices.joinQueue(userQueue.room, Number(userQueue.numberPlayers) ,userQueue.username)
+
+    const room = userQueue.room + userQueue.numberPlayers
+
+    if(resposneQueue.message === 'Its a Match!'){
+      io.emit(room, resposneQueue);
+    }
+
+    socket.join(room);
+
+    socket.emit("message", "Bem viados!");
+  });
+
+});
+//old with queue objects statci
+/* io.on("connection", (socket) => {
   socket.on("joinRoom", (userQueue) => {
     const resposneQueue = queueLoad.joinQueue(userQueue.room, userQueue.username, userQueue.numberPlayers)
 
@@ -32,6 +50,6 @@ io.on("connection", (socket) => {
     socket.emit("message", "Bem viados!");
   });
 
-});
+}); */
 
 server.listen(PORT, () => console.log(`Server running on port ${PORT}`));

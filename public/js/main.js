@@ -8,6 +8,8 @@ const user = { username, room, numberPlayers } = Qs.parse(location.search, {
   ignoreQueryPrefix: true,
 });
 
+const newRoom = room+numberPlayers
+
 const socket = io();
 
 // Join queueRoom
@@ -17,7 +19,7 @@ socket.on('message', (message) => {
   console.log(message);
 });
 
-socket.on(room, (message) => {
+socket.on(newRoom, (message) => {
   console.log(message);
 });
 
