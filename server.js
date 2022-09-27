@@ -10,7 +10,7 @@ const queueLoad = require('./scr/utils/queue')
 
 const app = express();
 const server = http.createServer(app);
-const io = socketio(server);
+const io = new socketio.Server(server);
 
 const queueServices = require('./scr/services/Queue.Service')
 
