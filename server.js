@@ -10,7 +10,11 @@ const queueLoad = require('./scr/utils/queue')
 
 const app = express();
 const server = http.createServer(app);
-const io = new socketio.Server(server);
+const io = new socketio.Server(server, {
+  cors: {
+    origin: process.env.APPURL
+  }
+});
 
 const queueServices = require('./scr/services/Queue.Service')
 
