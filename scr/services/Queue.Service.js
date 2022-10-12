@@ -46,7 +46,7 @@ exports.joinQueue = async (gameName, necessaryPlayers, playerName) => {
 exports.itsMatch = async (specsId, necessaryPlayers) => {
   const match = await this.getByNecessaryPlayers(specsId.specsId, necessaryPlayers)
   
-  if( match.necessaryPlayers === match.queuePlayer.length) {
+  if( (match.necessaryPlayers === match.queuePlayer.length) || (match.necessaryPlayers < match.queuePlayer.length)) {
     await this.cleanQueue(specsId.id);
     return {queueId: specsId.id,message: 'Its a Match!', queue: match.queuePlayer}
   }
