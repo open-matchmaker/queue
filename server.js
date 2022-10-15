@@ -43,17 +43,13 @@ io.on("connection", (socket)  => {
 
     const user = await queueServices.disconnectQueue(userDisconect.room, Number(userDisconect.numberPlayers) ,userDisconect.username);
 
-
     socket.disconnect()
-
   });
 
   socket.on("disconnect", (motivo) => {
     console.log(motivo)
   })
 
-
 });
-
 
 server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
