@@ -54,54 +54,6 @@ exports.itsMatch = async (specsId, necessaryPlayers) => {
   return {queueId: specsId.id, message: `Its necessary ${(match.necessaryPlayers - match.queuePlayer.length)} players`}
 }
 
-exports.disconnectQueue = async (gameName, necessaryPlayers, playerName) => {
-  let specsId = ""
-  let playersQueue = "";
-  const gameInQueue = await this.getByGameName(gameName);
-
-
-  if (gameInQueue) {
-    playersQueue = await this.getByNecessaryPlayers(gameInQueue.id, necessaryPlayers)
-
-
-    if (playersQueue) {
-      specsId = await this.removePlayerQueue(playersQueue, playerName)
-    };
-    /*if (!playersQueue) {
-      specsId = await this.createQueue(gameInQueue.id, necessaryPlayers, playerName)
-    }; */
-    
-  }
-
-  console.log(playersQueue)
-  console.log(playerName)
-/* await prisma.specs.update({
-    where: {
-      id: specsId.id
-    },
-    data: {
-      playersQueue: {
-        queuePlayer: []
-      }
-    }
-  })
-*/
-}
-
-exports.removePlayerQueue = async (playersQueue, playerName) => {
-  let newData = playersQueue
-  newData.queuePlayer.pop({playerName: playerName})
-  const updatedQueue = await prisma.specs.update({
-    where: {
-      id: playersQueue.id
-    },
-    data: {
-      queuePlayer: newData.queuePlayer
-    }
-  });
-  return updatedQueue;
-}
-
 exports.cleanQueue = async (id) => {
   const cleanQueue = await prisma.specs.update({
     where: {

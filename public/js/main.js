@@ -18,4 +18,3 @@ socket.on(newRoom, (message) => {
   console.log(message);
 });
 
-setTimeout(() => socket.emit('quitQueue', user), 5000)
