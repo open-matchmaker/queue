@@ -36,24 +36,20 @@ io.on("connection", (socket)  => {
 
     socket.join(room);
 
-    socket.emit("message", "Bem viados!");
+    socket.emit("message", "Bem vindos!");
   });
+
+  socket.on("quitQueue", async (userDisconect) => {
+
+    const user = await queueServices.disconnectQueue(userDisconect.room, Number(userDisconect.numberPlayers) ,userDisconect.username);
+
+    socket.disconnect()
+  });
+
+  socket.on("disconnect", () => {
+    console.log("a conexao foi encerrada");
+  })
 
 });
-//old with queue objects statci
-/* io.on("connection", (socket) => {
-  socket.on("joinRoom", (userQueue) => {
-    const resposneQueue = queueLoad.joinQueue(userQueue.room, userQueue.username, userQueue.numberPlayers)
-
-    if(resposneQueue.message){
-      io.emit(userQueue.room, resposneQueue);
-    }
-
-    socket.join(userQueue.room);
-
-    socket.emit("message", "Bem viados!");
-  });
-
-}); */
 
 server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
