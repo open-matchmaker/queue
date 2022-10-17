@@ -48,8 +48,8 @@ io.on("connection", (socket)  => {
 
   });
 
-  socket.on("disconnect", (motivo) => {
-    console.log(motivo)
+  socket.on("disconnect", () => {
+    console.log("a conexao foi encerrada");
   })
 
 
